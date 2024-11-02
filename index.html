@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Kyle Wong" />
+  <title>ee100cc64d754b0a88aaafe3b459ee13</title>
+  <style>
+    html {
+      line-height: 1.5;
+      font-family: Georgia, serif;
+      font-size: 20px;
+      color: #1a1a1a;
+      background-color: #fdfdfd;
+    }
+    body {
+      margin: 0 auto;
+      max-width: 36em;
+      padding-left: 50px;
+      padding-right: 50px;
+      padding-top: 50px;
+      padding-bottom: 50px;
+      hyphens: auto;
+      overflow-wrap: break-word;
+      text-rendering: optimizeLegibility;
+      font-kerning: normal;
+    }
+    @media (max-width: 600px) {
+      body {
+        font-size: 0.9em;
+        padding: 1em;
+      }
+      h1 {
+        font-size: 1.8em;
+      }
+    }
+    @media print {
+      body {
+        background-color: transparent;
+        color: black;
+        font-size: 12pt;
+      }
+      p, h2, h3 {
+        orphans: 3;
+        widows: 3;
+      }
+      h2, h3, h4 {
+        page-break-after: avoid;
+      }
+    }
+    p {
+      margin: 1em 0;
+    }
+    a {
+      color: #1a1a1a;
+    }
+    a:visited {
+      color: #1a1a1a;
+    }
+    img {
+      max-width: 100%;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 1.4em;
+    }
+    h5, h6 {
+      font-size: 1em;
+      font-style: italic;
+    }
+    h6 {
+      font-weight: normal;
+    }
+    ol, ul {
+      padding-left: 1.7em;
+      margin-top: 1em;
+    }
+    li > ol, li > ul {
+      margin-top: 0;
+    }
+    blockquote {
+      margin: 1em 0 1em 1.7em;
+      padding-left: 1em;
+      border-left: 2px solid #e6e6e6;
+      color: #606060;
+    }
+    code {
+      font-family: Menlo, Monaco, 'Lucida Console', Consolas, monospace;
+      font-size: 85%;
+      margin: 0;
+    }
+    pre {
+      margin: 1em 0;
+      overflow: auto;
+    }
+    pre code {
+      padding: 0;
+      overflow: visible;
+      overflow-wrap: normal;
+    }
+    .sourceCode {
+     background-color: transparent;
+     overflow: visible;
+    }
+    hr {
+      background-color: #1a1a1a;
+      border: none;
+      height: 1px;
+      margin: 1em 0;
+    }
+    table {
+      margin: 1em 0;
+      border-collapse: collapse;
+      width: 100%;
+      overflow-x: auto;
+      display: block;
+      font-variant-numeric: lining-nums tabular-nums;
+    }
+    table caption {
+      margin-bottom: 0.75em;
+    }
+    tbody {
+      margin-top: 0.5em;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    th {
+      border-top: 1px solid #1a1a1a;
+      padding: 0.25em 0.5em 0.25em 0.5em;
+    }
+    td {
+      padding: 0.125em 0.5em 0.25em 0.5em;
+    }
+    header {
+      margin-bottom: 4em;
+      text-align: center;
+    }
+    #TOC li {
+      list-style: none;
+    }
+    #TOC ul {
+      padding-left: 1.3em;
+    }
+    #TOC > ul {
+      padding-left: 0;
+    }
+    #TOC a:not(:hover) {
+      text-decoration: none;
+    }
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">CS180 Project 2</h1>
+<p class="author">Kyle Wong</p>
+<p class="date">September 2023</p>
+</header>
+<h1 id="fun-with-filters">Fun With Filters</h1>
+<h2 id="finite-difference-operator">Finite Difference Operator</h2>
+<p>Gradient Magnitude image formula:<br />
+Dx = <span class="math inline">$\begin{bmatrix}
+1 &amp; -1
+\end{bmatrix}$</span><br />
+Dy = <span class="math inline">$\begin{bmatrix}
+1\\
+-1
+\end{bmatrix}$</span><br />
+Dx_im = Dx * image<br />
+Dy_im = Dy * image<br />
+Gradient Magnitude = <span class="math inline">$\sqrt{Dx\_im ^2 + Dy\_im
+^2}$</span><br />
+To calculate the partial derivative in x and y, I convolved the image
+with finite difference operators Dx and Dy. The Dx operator will do a
+basic slope calculation between the im[y, x] and im[y, x+1]. The Dy
+operator will do the same but in the y-axis. Important to note that the
+Dx will find vertical edges and the Dy will find horizontal edges. The
+gradient magnitude represents how we want the average of these changes
+therefore we just do the L_2 Norm of Dx_im and Dy_in. There are many
+edges in the image, but we want just the prominent ones and not the
+noisy ones. To find the real edges without noise, I binarized the
+gradient magnitude by choosing an appropriate threshold.</p>
+<figure>
+<img src="dx.png" id="fig:awesome_image2"
+alt="gradient magnitude thres=0.25" />
+<figcaption aria-hidden="true">gradient magnitude
+thres=0.25</figcaption>
+</figure>
+<figure>
+<img src="dy.png" id="fig:awesome_image2"
+alt="gradient magnitude thres=0.25" />
+<figcaption aria-hidden="true">gradient magnitude
+thres=0.25</figcaption>
+</figure>
+<figure>
+<img src="gradient magnitude.png" id="fig:awesome_image2"
+alt="gradient magnitude thres=0.25" />
+<figcaption aria-hidden="true">gradient magnitude
+thres=0.25</figcaption>
+</figure>
+<figure>
+<img src="gradient magnitude threshold.png" id="fig:awesome_image2"
+alt="gradient magnitude thres=0.25" />
+<figcaption aria-hidden="true">gradient magnitude
+thres=0.25</figcaption>
+</figure>
+<h2 id="derivative-of-gaussian-dog-filter">Derivative of Gaussian (DoG)
+Filter</h2>
+<p>Differences between 1.1 and 1.2 (Gaussian blurring): In the blurred
+image, the edges are more prominent and there is less noise in the
+image. Since the high frequencies have been removed, the threshold value
+can be reduced since only the most prominent edges remain. In this case
+it went from 0.25 to 0.03.</p>
+<p>The graphs "Blur then Derivative Convolve" and "Single Convolution"
+look basically the same with the prominent edges showing up in both of
+them.</p>
+<figure>
+<img src="blur then convolve.png" id="fig:awesome_image2"
+alt="single convolution thres=0.25" />
+<figcaption aria-hidden="true">single convolution
+thres=0.25</figcaption>
+</figure>
+<figure>
+<img src="blur then convolve with threshold.png" id="fig:awesome_image2"
+alt="single convolution thres=0.25" />
+<figcaption aria-hidden="true">single convolution
+thres=0.25</figcaption>
+</figure>
+<figure>
+<img src="single convolution.png" id="fig:awesome_image2"
+alt="single convolution thres=0.25" />
+<figcaption aria-hidden="true">single convolution
+thres=0.25</figcaption>
+</figure>
+<figure>
+<img src="single convolution with threshold.png" id="fig:awesome_image2"
+alt="single convolution thres=0.25" />
+<figcaption aria-hidden="true">single convolution
+thres=0.25</figcaption>
+</figure>
+<h1 id="fun-with-frequencies">Fun with Frequencies!</h1>
+<h2 id="image-sharpening">Image "Sharpening"</h2>
+<figure>
+<img src="taj with no sharpening.png" id="fig:awesome_image2"
+alt="taj with sharpening" />
+<figcaption aria-hidden="true">taj with sharpening</figcaption>
+</figure>
+<figure>
+<img src="taj with sharpening.png" id="fig:awesome_image2"
+alt="taj with sharpening" />
+<figcaption aria-hidden="true">taj with sharpening</figcaption>
+</figure>
+<figure>
+<img src="lebron with no sharpening.png" id="fig:awesome_image2"
+alt="lebron with sharpening" />
+<figcaption aria-hidden="true">lebron with sharpening</figcaption>
+</figure>
+<figure>
+<img src="lebron with sharpening.png" id="fig:awesome_image2"
+alt="lebron with sharpening" />
+<figcaption aria-hidden="true">lebron with sharpening</figcaption>
+</figure>
+<figure>
+<img src="kobe with no sharpening.png" id="fig:awesome_image2"
+alt="blurred kobe with sharpening" />
+<figcaption aria-hidden="true">blurred kobe with sharpening</figcaption>
+</figure>
+<figure>
+<img src="kobe with blurring.png" id="fig:awesome_image2"
+alt="blurred kobe with sharpening" />
+<figcaption aria-hidden="true">blurred kobe with sharpening</figcaption>
+</figure>
+<figure>
+<img src="blurred kobe with sharpening.png" id="fig:awesome_image2"
+alt="blurred kobe with sharpening" />
+<figcaption aria-hidden="true">blurred kobe with sharpening</figcaption>
+</figure>
+<h2 id="hybrid-images">Hybrid Images</h2>
+<figure>
+<img src="DerekPicture.jpg" id="fig:awesome_image2" alt="Hybrid" />
+<figcaption aria-hidden="true">Hybrid</figcaption>
+</figure>
+<figure>
+<img src="nutmeg.jpg" id="fig:awesome_image2" alt="Hybrid" />
+<figcaption aria-hidden="true">Hybrid</figcaption>
+</figure>
+<figure>
+<img src="mancat.png" id="fig:awesome_image2" alt="Hybrid" />
+<figcaption aria-hidden="true">Hybrid</figcaption>
+</figure>
+<h4
+id="failure-i-had-to-bump-the-cat-high-frequencies-up-quite-a-bit-for-it-to-appear-on-the-dog-and-it-made-the-border-appear.-i-did-not-know-how-to-get-rid-of-the-border.">Failure:
+I had to bump the cat high frequencies up quite a bit for it to appear
+on the dog and it made the border appear. I did not know how to get rid
+of the border.</h4>
+<figure>
+<img src="dog.jpeg" id="fig:awesome_image2" alt="Hybrid" />
+<figcaption aria-hidden="true">Hybrid</figcaption>
+</figure>
+<figure>
+<img src="cat.jpeg" id="fig:awesome_image2" alt="Hybrid" />
+<figcaption aria-hidden="true">Hybrid</figcaption>
+</figure>
+<figure>
+<img src="dogcat.png" id="fig:awesome_image2" alt="Hybrid" />
+<figcaption aria-hidden="true">Hybrid</figcaption>
+</figure>
+<figure>
+<img src="cat.jpeg" id="fig:awesome_image2" alt="Hybrid" />
+<figcaption aria-hidden="true">Hybrid</figcaption>
+</figure>
+<figure>
+<img src="lion.jpeg" id="fig:awesome_image2" alt="Hybrid" />
+<figcaption aria-hidden="true">Hybrid</figcaption>
+</figure>
+<figure>
+<img src="lioncat.png" id="fig:awesome_image2" alt="Hybrid" />
+<figcaption aria-hidden="true">Hybrid</figcaption>
+</figure>
+<figure>
+<img src="cat.jpeg" id="fig:awesome_image2"
+alt="LF Image Input Low Freq FFT" />
+<figcaption aria-hidden="true">LF Image Input Low Freq FFT</figcaption>
+</figure>
+<figure>
+<img src="low cat.png" id="fig:awesome_image2"
+alt="LF Image Input Low Freq FFT" />
+<figcaption aria-hidden="true">LF Image Input Low Freq FFT</figcaption>
+</figure>
+<figure>
+<img src="cat fourier.png" id="fig:awesome_image2"
+alt="LF Image Input Low Freq FFT" />
+<figcaption aria-hidden="true">LF Image Input Low Freq FFT</figcaption>
+</figure>
+<figure>
+<img src="lion.jpeg" id="fig:awesome_image2"
+alt="HF Image Input High Freq FFT" />
+<figcaption aria-hidden="true">HF Image Input High Freq FFT</figcaption>
+</figure>
+<figure>
+<img src="high lion.png" id="fig:awesome_image2"
+alt="HF Image Input High Freq FFT" />
+<figcaption aria-hidden="true">HF Image Input High Freq FFT</figcaption>
+</figure>
+<figure>
+<img src="lion fourier.png" id="fig:awesome_image2"
+alt="HF Image Input High Freq FFT" />
+<figcaption aria-hidden="true">HF Image Input High Freq FFT</figcaption>
+</figure>
+<figure>
+<img src="hybrid fourier.png" id="fig:awesome_image2" alt="Hybrid" />
+<figcaption aria-hidden="true">Hybrid</figcaption>
+</figure>
+<figure>
+<img src="lioncat.png" id="fig:awesome_image2" alt="Hybrid" />
+<figcaption aria-hidden="true">Hybrid</figcaption>
+</figure>
+<h2 id="gaussian-and-laplacian-stacks">Gaussian and Laplacian
+Stacks</h2>
+<p><img src="apple gaussian level 0.png" alt="image" /> <img
+src="apple gaussian level 1.png" alt="image" /> <img
+src="apple gaussian level 2.png" alt="image" /> <img
+src="apple gaussian level 3.png" alt="image" /> <img
+src="apple gaussian level 4.png" alt="image" /></p>
+<p><img src="apple laplacian level 0.png" alt="image" /> <img
+src="apple laplacian level 1.png" alt="image" /> <img
+src="apple laplacian level 2.png" alt="image" /> <img
+src="apple laplacian level 3.png" alt="image" /> <img
+src="apple laplacian level 4.png" alt="image" /></p>
+<p><img src="orange gaussian level 0.png" alt="image" /> <img
+src="orange gaussian level 1.png" alt="image" /> <img
+src="orange gaussian level 2.png" alt="image" /> <img
+src="orange gaussian level 3.png" alt="image" /> <img
+src="orange gaussian level 4.png" alt="image" /></p>
+<p><img src="orange laplacian level 0.png" alt="image" /> <img
+src="orange laplacian level 1.png" alt="image" /> <img
+src="orange laplacian level 2.png" alt="image" /> <img
+src="orange laplacian level 3.png" alt="image" /> <img
+src="orange laplacian level 4.png" alt="image" /></p>
+<figure>
+<img src="LHS 0.png" alt="LHS+RHS" />
+<figcaption aria-hidden="true">LHS+RHS</figcaption>
+</figure>
+<figure>
+<img src="RHS 0.png" alt="LHS+RHS" />
+<figcaption aria-hidden="true">LHS+RHS</figcaption>
+</figure>
+<figure>
+<img src="blended laplacian level 0.png" alt="LHS+RHS" />
+<figcaption aria-hidden="true">LHS+RHS</figcaption>
+</figure>
+<figure>
+<img src="LHS 2.png" alt="LHS+RHS" />
+<figcaption aria-hidden="true">LHS+RHS</figcaption>
+</figure>
+<figure>
+<img src="RHS 2.png" alt="LHS+RHS" />
+<figcaption aria-hidden="true">LHS+RHS</figcaption>
+</figure>
+<figure>
+<img src="blended laplacian level 2.png" alt="LHS+RHS" />
+<figcaption aria-hidden="true">LHS+RHS</figcaption>
+</figure>
+<figure>
+<img src="LHS 4.png" alt="LHS+RHS" />
+<figcaption aria-hidden="true">LHS+RHS</figcaption>
+</figure>
+<figure>
+<img src="RHS 4.png" alt="LHS+RHS" />
+<figcaption aria-hidden="true">LHS+RHS</figcaption>
+</figure>
+<figure>
+<img src="blended laplacian level 4.png" alt="LHS+RHS" />
+<figcaption aria-hidden="true">LHS+RHS</figcaption>
+</figure>
+<figure>
+<img src="LHS recreated.png" alt="LHS+RHS" />
+<figcaption aria-hidden="true">LHS+RHS</figcaption>
+</figure>
+<figure>
+<img src="RHS recreated.png" alt="LHS+RHS" />
+<figcaption aria-hidden="true">LHS+RHS</figcaption>
+</figure>
+<figure>
+<img src="orapple.png" alt="LHS+RHS" />
+<figcaption aria-hidden="true">LHS+RHS</figcaption>
+</figure>
+<h2 id="multiresolution-blending">Multiresolution Blending</h2>
+<figure>
+<img src="lionface.jpeg" alt="RHS" />
+<figcaption aria-hidden="true">RHS</figcaption>
+</figure>
+<figure>
+<img src="tigerface.jpg" alt="RHS" />
+<figcaption aria-hidden="true">RHS</figcaption>
+</figure>
+<figure>
+<img src="liger_mask.png" alt="Collapsed" />
+<figcaption aria-hidden="true">Collapsed</figcaption>
+</figure>
+<figure>
+<img src="liger.png" alt="Collapsed" />
+<figcaption aria-hidden="true">Collapsed</figcaption>
+</figure>
+<figure>
+<img src="trump.jpg" alt="Blend In" />
+<figcaption aria-hidden="true">Blend In</figcaption>
+</figure>
+<figure>
+<img src="obamaface.png" alt="Blend In" />
+<figcaption aria-hidden="true">Blend In</figcaption>
+</figure>
+<figure>
+<img src="president_mask.png" alt="Collapsed" />
+<figcaption aria-hidden="true">Collapsed</figcaption>
+</figure>
+<figure>
+<img src="mypresident.png" alt="Collapsed" />
+<figcaption aria-hidden="true">Collapsed</figcaption>
+</figure>
+<h1 id="reflection">Reflection</h1>
+<p>This was really cool. I’ve played around with photoshop before, but I
+never knew it was using a bunch of math. The hard part was finding
+images that would align correctly.</p>
+</body>
+</html>
